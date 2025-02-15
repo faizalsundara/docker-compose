@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+    service-banking:
+        build: ./banking
+        environment:
+          - CONFIG="host=service-postgres port=5432 user=postgres password=mysecretpassword1 dbname=postgres sslmode=disable"
+          - PORT=8083
+        ports:
+          - 8083:8083
+        networks: 
+          - my-network
+        depends_on:
+          - service-postgres
+
+    service-postgres:
+        image: postgres:latest
+        environment:
+          - POSTGRES_PASSWORD=mysecretpassword1
+        ports:
+          - 5432:5432
+        volumes:
+          - C:/code-go/docker-volume-banking:/var/lib/postgresql/data
+        networks: 
+          - my-network
+networks:
+    my-network:
